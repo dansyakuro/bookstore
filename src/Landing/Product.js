@@ -28,7 +28,7 @@ const Product = () => {
     }
 
     const fetchMoreData = async () => {
-        await fetch(`http://bookstore.rtcserver.cloud/index.php/limitBook/${data.limit}/${data.count}/${data.search}`).then((res)=>res.json()).then(json=>{
+        await fetch(`http://bookstore.rtcserver.cloud/limitBook/${data.limit}/${data.count}/${data.search}`).then((res)=>res.json()).then(json=>{
             setBooks(books.concat(json));
             console.log("JSON :",json);
             if(json.length < data.limit){

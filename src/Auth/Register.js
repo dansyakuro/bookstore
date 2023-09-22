@@ -44,7 +44,7 @@ const Register = () => {
     }
 
     const sendRequest = async() => {
-        await fetch('http://bookstore.rtcserver.cloud/index.php/register', {
+        await fetch('http://bookstore.rtcserver.cloud/register', {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
