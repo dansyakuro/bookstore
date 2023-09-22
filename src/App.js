@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import Landing from './Landing/LandingUse';
+import AuthUse from './Auth/AuthUse';
+import {BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+    <BrowserRouter>
+    <Routes>
+      <Route index path='/' element={
+          <Landing tipe={"Home"}/>
+      }>
+      </Route>
+      <Route path='/book/detail/:id' element={
+          <Landing tipe={"Detail Book"}/>
+      }>
+      </Route>
+      <Route path= '/auth/login' element={<AuthUse tipe={"Login"}/>}></Route>
+      <Route path= '/auth/register' element={<AuthUse tipe={"Register"}/>}></Route>
+      <Route path= '/auth/forgot' element={<AuthUse tipe={"Forgot"}/>}></Route>
+    </Routes>
+    </BrowserRouter>
     </div>
   );
 }
