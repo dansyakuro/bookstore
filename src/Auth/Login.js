@@ -38,7 +38,7 @@ const Login = () => {
     }
 
     const sendRequest = async() => {
-        await fetch('http://bookstore.rtcserver.cloud/login/0', {
+        await fetch('http://bookstore.rtcserver.cloud/index.php/login/0', {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

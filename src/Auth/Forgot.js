@@ -38,7 +38,7 @@ const Forgot = () => {
     }
 
     const sendRequest = async() => {
-        await fetch('http://bookstore.rtcserver.cloud/login', {
+        await fetch('http://bookstore.rtcserver.cloud/index.php/login', {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
