@@ -32,7 +32,7 @@ const DetailBook = () => {
     
     useEffect(() => {
         const fetchHandler = async () => {
-            await fetch(`http://localhost/bookstoreAPI/book/${routeParams.id}`).then((res)=>res.json()).then(data=>setBooks(data)).catch(err=>console.log(err));
+            await fetch(`http://bookstore.rtcserver.cloud/book/${routeParams.id}`).then((res)=>res.json()).then(data=>setBooks(data)).catch(err=>console.log(err));
         };
         fetchHandler();
     }, []);
