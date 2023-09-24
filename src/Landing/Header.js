@@ -12,7 +12,7 @@ const Header = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light navbar-default navbar-fixed-top " role="navigation">
             <div className="container">
-                <a className="navbar-brand page-scroll" href="/#main"><img src={`${process.env.PUBLIC_URL}/assets/logos/logo.png`} alt="adminity Logo" /></a>
+                <a className="navbar-brand page-scroll" href="/"><img src={`${process.env.PUBLIC_URL}/assets/logos/logo.png`} alt="adminity Logo" /></a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -28,7 +28,7 @@ const Header = () => {
                             ? 
                             (
                             <li className="nav-item">
-                                <a className="nav-link page-scroll" href="http://localhost/bookstoreAPI">Data</a>
+                                <a className="nav-link page-scroll" href="http://bookstore.rtcserver.cloud">Data</a>
                             </li> 
                             )
                             : ""

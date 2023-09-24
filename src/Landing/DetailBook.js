@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 
@@ -29,55 +29,14 @@ const DetailBook = () => {
         }
     }
     const [books, setBooks] = useState([]);
-
-    const [data, setData] = useState({
-        hasMore:true,
-        limit:3,
-        count:0,
-        search: sessionStorage.getItem("search") !== null ? sessionStorage.getItem("search") : "All"
-    });
-
-    const handleChange = (e) => {
-        setData((prevState) => ({
-        ...prevState,
-        [e.target.name]: e.target.value === "" ? "All" : e.target.value
-        }));
-        console.log(e.target.name + ', '+e.target.value);
-    }
-    const submitSearch = (e) => {
-        sessionStorage.setItem("search", data.search);
-        window.location.reload(true);
-    }
-    const refreshSearch = (e) => {
-        sessionStorage.removeItem("search");
-        window.location.reload(true);
-    }
-
-    const fetchMoreData = async () => {
-        await fetch(`http://bookstore.rtcserver.cloud/book/${routeParams.id}`).then((res)=>res.json()).then(json=>{
-            setBooks(books.concat(json));
-            console.log("JSON :",json);
-            if(json.length < data.limit){
-                setData((prevState) => ({
-                    ...prevState,
-                    hasMore: false
-                }));
-                if(data.count === 0) 
-                setData((prevState) => ({
-                    ...prevState,
-                    count: json.length
-                }));
-            } else {
-                setData((prevState) => ({
-                    ...prevState,
-                    count: data.count + data.limit
-                }));
-            }
-        }).catch(err=>console.log(err));
-    };
-    if (data.hasMore === true && data.count === 0) fetchMoreData();
+    
+    useEffect(() => {
+        const fetchHandler = async () => {
+            await fetch(`http://localhost/bookstoreAPI/book/${routeParams.id}`).then((res)=>res.json()).then(data=>setBooks(data)).catch(err=>console.log(err));
+        };
+        fetchHandler();
+    }, []);
     console.log("Data :",books);
-    console.log("Count :",data);
 
     return (
         <div className="pcoded-content">
@@ -91,25 +50,46 @@ const DetailBook = () => {
                                         <div className="card-block">
                                             <div className="row">
                                                 <div className="col-lg-5 col-xs-12">
-                                                    <div className="port_details_all_img row">
+                                                    <div className="port_details_all_img row mb-sm-3">
                                                         <div className="col-lg-12 m-b-15">
                                                             <div id="big_banner">
-                                                                <div className="port_big_img">
-                                                                    <img className="img img-fluid" src={ require('../loginAssets/assets/images/product-detail/pro-d-l-1.jpg') } alt="Big_ Details" />
-                                                                </div>
-                                                                <div className="port_big_img">
-                                                                    <img className="img img-fluid" src={ require('../loginAssets/assets/images/product-detail/pro-d-l-2.jpg') } alt="Big_ Details" />
-                                                                </div>
+                                                                {
+                                                                    true
+                                                                    ? 
+                                                                    (
+                                                                        <div className="port_big_img">
+                                                                            <img className="img img-fluid" src={ `http://bookstore.rtcserver.cloud/assets/uploads/buku/${books.gambar}` } alt={books.gambar} />
+                                                                        </div>
+                                                                    )
+                                                                    : 
+                                                                    books.gambar.split(", ").forEach((item, index) => {
+                                                                        (
+                                                                            <div>
+                                                                                <img className="img img-fluid" src={ `http://bookstore.rtcserver.cloud/assets/uploads/buku/${item}` } alt={books.judul+index} />
+                                                                            </div>
+                                                                        )
+                                                                    })
+                                                                }
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-12 product-right">
                                                             <div id="small_banner">
-                                                                <div>
-                                                                    <img className="img img-fluid" src={ require('../loginAssets/assets/images/product-detail/pro-d-s-1.jpg') } alt="small-details" />
-                                                                </div>
-                                                                <div>
-                                                                    <img className="img img-fluid" src={ require('../loginAssets/assets/images/product-detail/pro-d-s-2.jpg') } alt="small-details" />
-                                                                </div>
+                                                                {
+                                                                    true
+                                                                    ? 
+                                                                    (
+                                                                        <div style={{width:87+'px'}}>
+                                                                            <img className="img img-fluid" src={ `http://bookstore.rtcserver.cloud/assets/uploads/buku/${books.gambar}` } alt={books.gambar} />
+                                                                        </div>
+                                                                    )
+                                                                    : books.gambar.split(", ").forEach((item, index) => {
+                                                                        (
+                                                                            <div>
+                                                                                <img className="img img-fluid" src={ `http://bookstore.rtcserver.cloud/assets/uploads/buku/${item}` } alt={books.judul+index} />
+                                                                            </div>
+                                                                        )
+                                                                    })
+                                                                }
                                                             </div>
                                                         </div>
                                                     </div>
@@ -118,14 +98,14 @@ const DetailBook = () => {
                                                     <div className="row">
                                                         <div>
                                                             <div className="col-lg-12">
-                                                                <span className="txt-muted d-inline-block">Product Code: <a href="#!"> PRDT1234 </a> </span>
-                                                                <span className="f-right">Availablity : <a href="#!"> In Stock </a> </span>
+                                                                <span className="txt-muted d-inline-block">Product Code: { books.id_buku} </span>
+                                                                <span className="f-right">Availablity : { books.stok > 0 ? 'In Stock' : 'Out of Stock'} </span>
                                                             </div>
                                                             <div className="col-lg-12">
-                                                                <h4 className="pro-desc">Athena Black & Red Polyester Georgette Maxi Dress</h4>
+                                                                <h4 className="pro-desc">{ books.judul }</h4>
                                                             </div>
                                                             <div className="col-lg-12">
-                                                                <span className="txt-muted"> Brand : Denim </span>
+                                                                <h6 className="font-weight-bold"> Category : <span>{ books.kategori }</span></h6>
                                                             </div>
                                                             <div className="stars stars-example-css m-t-15 detail-stars col-lg-12">
                                                                 <select id="product-view" className="rating-star" name="rating" autoComplete="off">
@@ -137,10 +117,13 @@ const DetailBook = () => {
                                                                 </select>
                                                             </div>
                                                             <div className="col-lg-12">
-                                                                <span className="text-primary product-price"><i className="icofont icofont-cur-dollar"></i>80.00</span> <span className="done-task txt-muted">$90.59</span>
+                                                                <span className="text-primary product-price">  
+                                                                    
+                                                                </span>
                                                                 <hr />
-                                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.
-                                                                </p>
+                                                                <h6 className="font-weight-bold mb-3">Author : <span>{ books.pengarang }</span></h6>
+                                                                <h6 className="font-weight-bold">Description :</h6>
+                                                                <p>{ books.deskripsi }</p>
                                                                 <hr />
                                                                 <h6 className="f-16 f-w-600 m-t-10 m-b-10">Quantity</h6>
                                                             </div>

@@ -8,22 +8,23 @@ const Product = () => {
         hasMore:true,
         limit:3,
         count:0,
+        btnSearch: sessionStorage.getItem("search") !== null ? "Search All" :"Search",
         search: sessionStorage.getItem("search") !== null ? sessionStorage.getItem("search") : "All"
     });
 
     const handleChange = (e) => {
-        setData((prevState) => ({
-        ...prevState,
-        [e.target.name]: e.target.value === "" ? "All" : e.target.value
-        }));
+        if(e.target.name === 'search' && data.hasMore===false && e.target.value === sessionStorage.getItem("search"))
+            setData((prevState) => ({ ...prevState, [e.target.name]: e.target.value, btnSearch:"Search All" })); 
+        else setData((prevState) => ({ ...prevState, [e.target.name]: e.target.value, btnSearch:"Search" })); 
         console.log(e.target.name + ', '+e.target.value);
     }
+
     const submitSearch = (e) => {
-        sessionStorage.setItem("search", data.search);
-        window.location.reload(true);
-    }
-    const refreshSearch = (e) => {
-        sessionStorage.removeItem("search");
+        if(data.hasMore===false && data.search === sessionStorage.getItem("search"))
+            sessionStorage.removeItem("search");
+        else 
+            sessionStorage.setItem("search", data.search);
+        console.log(data.search);
         window.location.reload(true);
     }
 
@@ -72,12 +73,8 @@ const Product = () => {
                                     <div className="row seacrh-header">
                                         <div className="col-lg-4 offset-lg-4 offset-sm-3 col-sm-6 offset-sm-1 col-xs-12">
                                             <div className="input-group input-group-button input-group-primary">
-                                                <input type="text" name="search" onChange={handleChange} value={data.username} className="form-control mt-0" placeholder="Search here..." />
-                                                {
-                                                    data.hasMore === false && data.count === 0
-                                                    ? (<button className="btn btn-primary input-group-addon" id="basic-addon1" onClick={refreshSearch}>Search All</button>)
-                                                    : (<button className="btn btn-primary input-group-addon" id="basic-addon1" onClick={submitSearch}>Search</button>)
-                                                }
+                                                <input type="text" name="search" onChange={handleChange} value={data.search === 'All' ? '' : data.search} className="form-control mt-0" placeholder="Search here..." />
+                                                <button type="button" className="btn btn-primary input-group-addon" id="btnSearch" onClick={submitSearch}>{data.btnSearch}</button>
                                             </div>
                                         </div>
                                     </div>
